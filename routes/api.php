@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductCategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function() {
     // Route::apiResource('product-categories', 'ProductCategoryResource'); 
-    Route::get('product-categories', [ProductCategoryController::class]);
+    // Route::get('product-categories', [ProductCategoryController::class, 'index']);
+
+    Route::resource('product-categories', ProductCategoryController::class);
 });

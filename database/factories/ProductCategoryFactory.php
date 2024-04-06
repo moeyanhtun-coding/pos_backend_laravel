@@ -17,11 +17,8 @@ class ProductCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'ProductCategoryCode' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'ProductCategoryCode' => mt_rand(3000, 9999999),
+            'ProductCategoryName' => fake()->name()
         ];
     }
 }
