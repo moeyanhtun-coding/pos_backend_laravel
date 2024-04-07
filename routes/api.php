@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::resource('product-categories', ProductCategoryController::class);
     Route::resource('staff', StaffController::class);
+    Route::resource('shop', ShopController::class);
 });
 
 Route::post('/register', [AuthController::class, 'register']);

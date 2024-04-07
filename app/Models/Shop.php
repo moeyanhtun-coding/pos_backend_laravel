@@ -15,13 +15,18 @@ class Shop extends Model
     public static function generateShopCode()
     {
         // Generate a random string for the shop code
-        $code = str::random(8);
+        $alphabets = Str::random(3, 'abcdefghijklmnopqrstuvwxyz');
 
-        // Check if the generated code already exists in the database
-        while (self::where('code', $code)->exists()) {
-            $code = Str::random(8);
+        $numbers = Str::random(3, '0123456789');
+        $shop_code = $alphabets . $numbers;
+
+        // Check if the generated shop_code already exists in the database
+        while (self::where('shop_code', $shop_code)->exists()) {
+            $alphabets = Str::random(3, 'abcdefghijklmnopqrstuvwxyz');
+            $numbers = Str::random(3, '0123456789');
+            $shop_code = $alphabets . $numbers;
         }
 
-        return $code;
+        return $shop_code;
     }
 }

@@ -6,7 +6,6 @@ use App\Http\Requests\ShopRequest;
 use App\Http\Resources\ShopResource;
 use App\Models\Shop;
 use App\Services\ShopService;
-use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
@@ -31,7 +30,10 @@ class ShopController extends Controller
     public function store(ShopRequest $request)
     {
         // return $request->all();
-        $shop = $this->shop->insert($request->all());
+        $data = $request->validated();
+        $data['shop_code'] = Shop::generateShopCode();
+        // return $data;
+        $shop = $this->shop->insert($data);
 
         if ($shop) {
             return response()->json([
