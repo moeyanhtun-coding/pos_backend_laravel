@@ -2,40 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductCategoryRequest;
-use App\Http\Resources\ProductCategoryRource;
-use App\Models\ProductCategory;
-use App\Services\ProductCategoryService;
+use App\Http\Requests\ShopRequest;
+use App\Http\Resources\ShopResource;
+use App\Models\Shop;
+use App\Services\ShopService;
 use Illuminate\Http\Request;
 
-class ProductCategoryController extends Controller
+class ShopController extends Controller
 {
-    protected $productCategory;
+    protected $shop;
 
-
-    public function __construct(ProductCategoryService $productCategory)
+    function __construct(ShopService $shop)
     {
-        $this->productCategory = $productCategory;
+        $this->shop = $shop;
     }
-
-
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $productCategories = ProductCategory::get();
-        return ProductCategoryRource::collection($productCategories);
+        $shops = ShopResource::collection(Shop::get());
+        return $shops;
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductCategoryRequest $request)
+    public function store(ShopRequest $request)
     {
-
-        $productCategory = $this->productCategory->insert($request->all());
-
-        if ($productCategory) {
+        $shop = $this->shop->insert($request->all());
+        if ($shop) {
             return response()->json([
-                'data' => $productCategory,
+                'data' => $shop,
                 'status' => true
             ], 200);
         }
@@ -46,11 +44,11 @@ class ProductCategoryController extends Controller
      */
     public function show(string $id)
     {
-        $productCategory = $this->productCategory->getDataById($id);
-
-        if ($productCategory) {
+        $shop = new ShopResource($this->shop->getDataById($id));
+        // dd($shop);
+        if ($shop) {
             return response()->json([
-                'data' => $productCategory,
+                'data' => $shop,
                 'status' => true
             ], 200);
         } else {
@@ -64,13 +62,15 @@ class ProductCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ShopRequest $request, string $id)
     {
-        $productCategory = $this->productCategory->update($request->all(), $id);
 
-        if ($productCategory) {
+        $shop = $this->shop->update($request->all(), $id);
+        // return $shop;
+
+        if ($shop) {
             return response()->json([
-                'message' => 'Successfully updated data',
+                'data' => $shop,
                 'status' => true
             ], 200);
         } else {
@@ -86,11 +86,10 @@ class ProductCategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $productCategory = $this->productCategory->destroy($id);
-
-        if ($productCategory) {
+        $shop = $this->shop->destroy($id);
+        if ($shop) {
             return response()->json([
-                'message' => 'Successfully deleted data',
+                'data' => $shop,
                 'status' => true
             ], 200);
         } else {
