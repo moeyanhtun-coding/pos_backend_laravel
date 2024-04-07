@@ -12,7 +12,7 @@ class ProductCategoryController extends Controller
 {
     protected $productCategory;
 
-    
+
     public function __construct(ProductCategoryService $productCategory)
     {
         $this->productCategory = $productCategory;
@@ -33,7 +33,7 @@ class ProductCategoryController extends Controller
 
         $productCategory =  $this->productCategory->insert($request->all());
 
-        if($productCategory) {
+        if ($productCategory) {
             return response()->json([
                 'data' => $productCategory,
                 'status' => true
@@ -46,19 +46,19 @@ class ProductCategoryController extends Controller
      */
     public function show(string $id)
     {
-       $productCategory =  $this->productCategory->getDataById($id);
+        $productCategory =  $this->productCategory->getDataById($id);
 
-       if($productCategory) {
+        if ($productCategory) {
             return response()->json([
                 'data' => $productCategory,
                 'status' => true
             ], 200);
-       }else {
+        } else {
             return response()->json([
                 'message' => 'No data found',
                 'status' => false
             ], 404);
-       }
+        }
     }
 
     /**
@@ -68,17 +68,17 @@ class ProductCategoryController extends Controller
     {
         $productCategory =  $this->productCategory->update($request->all(), $id);
 
-        if($productCategory) {
+        if ($productCategory) {
             return response()->json([
                 'message' => 'Successfully updated data',
                 'status' => true
             ], 200);
-       }else {
+        } else {
             return response()->json([
                 'message' => 'No data found',
                 'status' => false
             ], 404);
-       }
+        }
     }
 
     /**
@@ -86,18 +86,18 @@ class ProductCategoryController extends Controller
      */
     public function destroy(string $id)
     {
-      $productCategory =   $this->productCategory->destroy($id);
+        $productCategory =   $this->productCategory->destroy($id);
 
-        if($productCategory) {
+        if ($productCategory) {
             return response()->json([
                 'message' => 'Successfully deleted data',
                 'status' => true
             ], 200);
-       }else {
+        } else {
             return response()->json([
                 'message' => 'No data found',
                 'status' => false
             ], 404);
-       }
+        }
     }
 }
