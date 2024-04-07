@@ -30,7 +30,9 @@ class ShopController extends Controller
      */
     public function store(ShopRequest $request)
     {
+        // return $request->all();
         $shop = $this->shop->insert($request->all());
+
         if ($shop) {
             return response()->json([
                 'data' => $shop,

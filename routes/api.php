@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductCategoryController;
-use App\Http\Controllers\ShopController;
+use App\Http\Controllers\StaffController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,10 +22,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'v1'], function () {
-    // Route::apiResource('product-categories', 'ProductCategoryResource'); 
+
+    // Route::apiResource('product-categories', 'ProductCategoryResource');
     // Route::get('product-categories', [ProductCategoryController::class, 'index']);
 
     Route::resource('product-categories', ProductCategoryController::class);
-    Route::resource('shop', ShopController::class);
-
+    Route::resource('staff', StaffController::class);
 });
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductCategoryRequest;
-use App\Http\Resources\ProductCategoryRource;
+use App\Http\Resources\ProductCategoryResource;
 use App\Models\ProductCategory;
 use App\Services\ProductCategoryService;
 use Illuminate\Http\Request;
@@ -22,7 +22,7 @@ class ProductCategoryController extends Controller
     public function index()
     {
         $productCategories = ProductCategory::get();
-        return ProductCategoryRource::collection($productCategories);
+        return ProductCategoryResource::collection($productCategories);
     }
 
     /**
