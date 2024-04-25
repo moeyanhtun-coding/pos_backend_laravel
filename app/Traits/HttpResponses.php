@@ -20,7 +20,7 @@ trait HttpResponses
 
             'message' => $message,
             'data' => $data,
-            'status' => 501,
+            'status' => $code,
         ], $code);
     }
 }

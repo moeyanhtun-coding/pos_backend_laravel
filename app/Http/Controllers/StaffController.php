@@ -24,32 +24,31 @@ class StaffController extends Controller
         $staff = Staff::get();
 
         return response()->json([
-            "data"=> StaffResource::collection($staff),
+            "data" => StaffResource::collection($staff),
             "status" => true
         ], 200);
-    
     }
 
-    
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreStaffRequest $request)
     {
-       
-       $validatedData = $request->validated();
 
-       $staffCode =  "Stf_" . mt_rand(3000, 999999);
+        $validatedData = $request->validated();
 
-       $validatedData["staffCode"] = $staffCode;
+        $staffCode =  "Stf_" . mt_rand(3000, 999999);
 
-       $staff =  $this->staff->insert($validatedData);
+        $validatedData["staffCode"] = $staffCode;
+
+        $staff =  $this->staff->insert($validatedData);
 
         if ($staff) {
             return response()->json([
                 'data' => StaffResource::make($staff),
-                'message'=>"A Staff is created successfully ",
+                'message' => "A Staff is created successfully ",
                 'status' => true
             ], 200);
         }
@@ -58,7 +57,7 @@ class StaffController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show( $id)
+    public function show($id)
     {
         $staff = $this->staff->getDataById($id);
 
@@ -67,7 +66,7 @@ class StaffController extends Controller
                 'data' => StaffResource::make($staff),
                 'status' => true
             ], 200);
-        }else{
+        } else {
             return response()->json([
                 'message' => 'No data found',
                 'status' => false
@@ -84,17 +83,17 @@ class StaffController extends Controller
     {
         $staff =  $this->staff->update($request->validated(), $id);
 
-        if($staff) {
+        if ($staff) {
             return response()->json([
                 'message' => 'Successfully updated data',
                 'status' => true
             ], 200);
-       }else {
+        } else {
             return response()->json([
                 'message' => 'No data found',
                 'status' => false
-            ], 404);    
-       }
+            ], 404);
+        }
     }
 
     /**
@@ -102,19 +101,18 @@ class StaffController extends Controller
      */
     public function destroy(string $id)
     {
-        $staff =   $this->staff->destroy($id);
+        $staff = $this->staff->destroy($id);
 
-        if($staff) {
+        if ($staff) {
             return response()->json([
                 'message' => 'Successfully deleted data',
                 'status' => true
             ], 200);
-       }else {
+        } else {
             return response()->json([
                 'message' => 'No data found',
                 'status' => false
             ], 404);
-       }
-    
+        }
     }
 }
