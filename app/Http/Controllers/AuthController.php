@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator as confirm;
 
 class AuthController extends Controller
 {
@@ -20,21 +22,42 @@ class AuthController extends Controller
     // }
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required', 'min:8'],
-        ]);
+        $validator =
+            Validator::make($request->all(), [
+                'email' => ['required', 'email'],
+                'password' => ['required', 'min:8'],
+            ]);
 
-        if (!Auth::attempt($request->only(['email', 'password']))) {
-            return $this->error('', 'Credentials do not match', 401);
+        if ($validator->fails()) {
+            return $this->error(
+                '',
+                $validator->errors()->all(),
+                422
+            );
         }
+
+
         $user = User::where('email', $request->email)->first();
 
-        return $this->success([
-            'user' => $user,
-            'token' => $user->createToken('API Token of' . $user->name)->plainTextToken,
-        ]);
+        if ($user) {
+            if (Hash::check($request->password, $user->password)) {
+                return $this->success(
+                    [
+                        'user' => $user,
+                        'token' => $user->createToken(time())->plainTextToken
+                    ],
+                    'Login Success',
+                    200
+                );
+            }
+        }
+        return $this->error(
+            '',
+            'Credentials Do Not Match',
+            '401'
+        );
     }
+
 
     // login Function
     // In Postman
@@ -48,7 +71,7 @@ class AuthController extends Controller
     // }
     public function register(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'min:8', 'max:255', 'unique:users'],
             'email' => ['required', 'email', 'unique:users'],
             'phone' => ['required', 'min:10'],
@@ -56,7 +79,13 @@ class AuthController extends Controller
             'password' => ['required', 'min:8', 'confirmed:password'],
 
         ]);
-
+        if ($validator->fails()) {
+            return $this->error(
+                "",
+                $validator->errors()->all(),
+                422
+            );
+        }
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -67,7 +96,7 @@ class AuthController extends Controller
 
         return $this->success([
             'user' => $user,
-            'token' => $user->createToken('API Token of' . $user->name)->plainTextToken
+            'token' => $user->createToken(time())->plainTextToken,
         ]);
     }
 }
