@@ -118,9 +118,9 @@ class SaleInvoiceController extends Controller
         $saleInvoice = $this->invoice->destroy($id);
 
         if($saleInvoice) {
-            return $this->success($saleInvoice, 'deleted', 200);
+            return $this->success(null, 'deleted', 200);
        }else {
-        return $this->error($saleInvoice, "No data found",404 );    
+        return $this->error(null, "No data found",404 );    
         }
     }
 }
