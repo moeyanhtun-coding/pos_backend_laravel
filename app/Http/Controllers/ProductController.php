@@ -16,11 +16,11 @@ class ProductController extends Controller
     public function __construct(ProductService $product){
         $this->product = $product;
     }
+
     public function index()
     {
-
-        $productList = ProductResource::collection(Product::get());
-        return $productList;
+        $productList = ProductResource::collection(Product::with('ProductCategory')->get());
+        // return $productList;
         return response()->json([
             'message' =>'success',
             'data' => $productList
@@ -32,11 +32,14 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-
-        $validatedData = $request->validate();
+        
         $productCode = 'P'.mt_rand(3000, 999999);
-        $validatedData['productCode'] = $productCode;
+        $validatedData['product_code'] = $productCode;
+        $validatedData['product_name'] = $request->product_name;
+        $validatedData['ProductCategoryId'] = $request->ProductCategoryId;
+        $validatedData['price'] = $request->price;
 
+        
         $product = $this->product->insert($validatedData);
 
         if($product){
