@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string("mobileNo");
             $table->date('dateOfBirth');            
             $table->enum('gender',['Male','Female','Other'])->default('Male');
-            $table->string("stateCode");
+            $table->string('stateCode');
             $table->string('townshipCode');
             $table->timestamps();
         });

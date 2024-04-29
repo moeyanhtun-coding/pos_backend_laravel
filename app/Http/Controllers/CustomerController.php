@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerRequest;
 use Illuminate\Http\Request;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
-
+use App\Services\CustomerService;
+use App\Traits\HttpResponses;
 
 class CustomerController extends Controller
 {
+    use HttpResponses;
     protected $customer;
 
     function __construct(CustomerService $customer)
@@ -36,19 +39,22 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
+        
         // return $request->all();
-        $data = $request->validated();
-   
-        $customer = $this->customer->insert($data);
+        $validatedData = $request->validated();
 
+        $customerCode =  "Cus_" . mt_rand(3000, 999999);
+
+        $validatedData["customerCode"] = $customerCode;
+   
+        $customer = $this->customer->insert($validatedData);
+
+        $resCus = CustomerResource::make($customer);
         if ($customer) {
-            return response()->json([
-                'data' => CustomerResource::make($customer),
-                'message'=>"A customer account is created successfully ",
-                'status' => true
-            ], 200);
+            return $this->success($resCus, "success", 200);
+            
         }
     }
 
