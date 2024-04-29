@@ -20,6 +20,7 @@ class StaffController extends Controller
         $this->staff = $staff;
     }
 
+   
     public function index()
     {
         $staff = Staff::get();
@@ -28,11 +29,7 @@ class StaffController extends Controller
         
     }
 
-    
-
-    /**
-     * Store a newly created resource in storage.
-     */
+     
     public function store(StoreStaffRequest $request)
     {
        
@@ -49,10 +46,7 @@ class StaffController extends Controller
             
         }
     }
-
-    /**
-     * Display the specified resource.
-     */
+     
     public function show( $id)
     {
         $staff = $this->staff->getDataById($id);
@@ -67,10 +61,7 @@ class StaffController extends Controller
     }
 
 
-
-    /**
-     * Update the specified resource in storage.
-     */
+  
     public function update(UpdateStaffRequest $request, string  $id)
     {
         $staff =  $this->staff->update($request->validated(), $id);
@@ -84,9 +75,6 @@ class StaffController extends Controller
        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $staff =   $this->staff->destroy($id);
@@ -94,7 +82,7 @@ class StaffController extends Controller
         if($staff) {
             return $this->success(null, 'deleted', 200);
        }else {
-        return $this->error($staff, "No data found",404 );    
+        return $this->error(null, "No data found",404 );    
 
        }
     
