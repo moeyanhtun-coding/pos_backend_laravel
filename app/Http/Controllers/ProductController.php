@@ -30,7 +30,6 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        
         $productCode = 'P'.mt_rand(3000, 999999);
         $validatedData['product_code'] = $productCode;
         $validatedData['product_name'] = $request->product_name;
