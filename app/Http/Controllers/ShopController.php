@@ -21,7 +21,7 @@ class ShopController extends Controller
     public function index()
     {
         $shops = ShopResource::collection(Shop::get());
-        return $shops;
+        return $this->success($shops, "success", 200);
     }
 
     /**
@@ -36,10 +36,7 @@ class ShopController extends Controller
         $shop = $this->shop->insert($data);
 
         if ($shop) {
-            return response()->json([
-                'data' => $shop,
-                'status' => true
-            ], 200);
+            return $this->success(ShopResource::make($shop), "success", 200);
         }
     }
 
@@ -51,15 +48,11 @@ class ShopController extends Controller
         $shop = new ShopResource($this->shop->getDataById($id));
         // dd($shop);
         if ($shop) {
-            return response()->json([
-                'data' => $shop,
-                'status' => true
-            ], 200);
+            return $this->success(ShopResource::make($shop), "success", 200);
+
         } else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
+            return $this->error($shop, 'No data found', 404);
+
         }
     }
 
@@ -73,15 +66,11 @@ class ShopController extends Controller
         // return $shop;
 
         if ($shop) {
-            return response()->json([
-                'data' => $shop,
-                'status' => true
-            ], 200);
+            return $this->success(ShopResource::make($shop), "success", 200);
+
         } else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
+            return $this->error($shop, 'No data found', 404);
+
         }
     }
 
@@ -91,16 +80,11 @@ class ShopController extends Controller
     public function destroy(string $id)
     {
         $shop = $this->shop->destroy($id);
-        if ($shop) {
-            return response()->json([
-                'data' => $shop,
-                'status' => true
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
-        }
+        if($shop) {
+            return $this->success(null, 'deleted', 200);
+       }else {
+        return $this->error(null, "No data found",404 );    
+
+       }
     }
 }

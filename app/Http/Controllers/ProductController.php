@@ -21,10 +21,8 @@ class ProductController extends Controller
     {
         $productList = ProductResource::collection(Product::with('ProductCategory')->get());
         // return $productList;
-        return response()->json([
-            'message' =>'success',
-            'data' => $productList
-        ],200);
+        return $this->success($productList, 'success', 200);
+
     }
 
     /**
@@ -42,13 +40,11 @@ class ProductController extends Controller
         
         $product = $this->product->insert($validatedData);
 
+        $resProduct = ProductResource::make($product);
+
         if($product){
-            return[
-                response()->json([
-                    'data' => $product,
-                    'message' => 'success'
-                ],200)
-            ];
+            return $this->success($resProduct, 'success', 200);
+
         }
     }
 
@@ -59,20 +55,14 @@ class ProductController extends Controller
     {
         $product = $this->product->getProductById($id);
 
+        $resProduct = ProductResource::make($product);
+
         if($product){
-
-            return[
-                response()->json([
-                    'data' => $product,
-                    'message' => 'success'
-                ],200)
-
-            ];
+       
+                return $this->success($resProduct, 'success', 200);
         }else{
-            return [response()->json([
-                'message' => "No product data found",
-                'status' => false
-            ],404)];
+            return $this->error($resProduct, 'No data found', 404);
+
         }
     }
 
@@ -84,20 +74,13 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request,string $id)
     {
         $product = $this->product->update($request->validated(),$id);
+        $resProduct = ProductResource::make($product);
         if($product){
-            return [
-                response()->json([
-                    'message' => 'Data updated Successfully',
-                    'status' => true
-                ],200)
-            ];
+            return $this->success($resProduct, 'success', 200);
+
         }else{
-            return [
-                response()->json([
-                    'message' => "No data found",
-                    'status' => false
-                ],404)
-            ];
+            return $this->error($resProduct, 'No data found', 404);
+
         }
     }
 
@@ -108,20 +91,11 @@ class ProductController extends Controller
     {
         $product = $this->product->destroy($id);
 
-        if($product){
-            return [
-                response()->json([
-                    'message' => "Delete successfully",
-                    'status' => true
-                ],200)
-            ];
-        }else{
-            return [
-                response()->json([
-                    'message' => "No data found",
-                    'status' => false
-                ],404)
-            ];
-        }
+        if($product) {
+            return $this->success(null, 'deleted', 200);
+       }else {
+        return $this->error(null, "No data found",404 );    
+
+       }
     }
 }

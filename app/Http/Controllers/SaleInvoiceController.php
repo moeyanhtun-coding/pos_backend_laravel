@@ -87,8 +87,10 @@ class SaleInvoiceController extends Controller
     {
         $saleInvoice = $this->invoice->getDataById($id);
 
+        $resInvoice = SaleInvoiceResource::make($saleInvoice);
+
         if ($saleInvoice) {
-            return $this->success(SaleInvoiceResource::make($saleInvoice), 'success', 200);
+            return $this->success($resInvoice, 'success', 200);
 
         }else{
             return $this->error($saleInvoice, 'No data found', 404);
