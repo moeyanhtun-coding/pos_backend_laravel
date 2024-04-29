@@ -2,18 +2,18 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreStaffRequest extends FormRequest
+class StoreProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,14 +24,10 @@ class StoreStaffRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "staffCode" => "",
-            "staffName" => "required|string",
-            "dateOfBirth"=> "required",
-            "mobileNo"=> "required",
-            "address" => "nullable",
-            "gender"=> "required|in:Male,Female, Other",
-            "position" => "required"
-
+            'productCode' => 'required',
+            'productName' => 'required',
+            'price' => 'required|numeric',
+            'ProductCategoryId' => 'required'
         ];
     }
 

@@ -8,10 +8,11 @@ use App\Http\Resources\StaffResource;
 use App\Http\Requests\StoreStaffRequest;
 use App\Http\Requests\UpdateStaffRequest;
 use App\Services\StaffService;
+use App\Traits\HttpResponses;
 
 class StaffController extends Controller
 {
-
+    use HttpResponses;
     protected $staff;
 
     public function __construct(StaffService $staff)
@@ -23,11 +24,8 @@ class StaffController extends Controller
     {
         $staff = Staff::get();
 
-        return response()->json([
-            "data"=> StaffResource::collection($staff),
-            "status" => true
-        ], 200);
-    
+        return $this->success(StaffResource::collection($staff), 'success', 200);
+        
     }
 
     
@@ -47,11 +45,8 @@ class StaffController extends Controller
        $staff =  $this->staff->insert($validatedData);
 
         if ($staff) {
-            return response()->json([
-                'data' => StaffResource::make($staff),
-                'message'=>"A Staff is created successfully ",
-                'status' => true
-            ], 200);
+            return $this->success(StaffResource::make($staff), "success", 200);
+            
         }
     }
 
@@ -63,15 +58,11 @@ class StaffController extends Controller
         $staff = $this->staff->getDataById($id);
 
         if ($staff) {
-            return response()->json([
-                'data' => StaffResource::make($staff),
-                'status' => true
-            ], 200);
+            return $this->success(StaffResource::make($staff), 'success', 200);
+
         }else{
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
+            return $this->error($staff, 'No data found', 404);
+           
         }
     }
 
@@ -83,17 +74,13 @@ class StaffController extends Controller
     public function update(UpdateStaffRequest $request, string  $id)
     {
         $staff =  $this->staff->update($request->validated(), $id);
+        
 
         if($staff) {
-            return response()->json([
-                'message' => 'Successfully updated data',
-                'status' => true
-            ], 200);
+            $updatedStaff = $this->staff->getDataById($id);
+            return $this->success(StaffResource::make($updatedStaff), 'Updated', 200);
        }else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);    
+            return $this->error(null, "No data found",404 );    
        }
     }
 
@@ -105,15 +92,10 @@ class StaffController extends Controller
         $staff =   $this->staff->destroy($id);
 
         if($staff) {
-            return response()->json([
-                'message' => 'Successfully deleted data',
-                'status' => true
-            ], 200);
+            return $this->success(null, 'deleted', 200);
        }else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
+        return $this->error($staff, "No data found",404 );    
+
        }
     
     }

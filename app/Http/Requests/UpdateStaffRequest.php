@@ -26,12 +26,12 @@ class UpdateStaffRequest extends FormRequest
         return [
             
                 "staffCode" => "",
-                "staffName" => "required|string",
-                "dateOfBirth"=> "required",
-                "mobileNo"=> "required|numeric",
+                "staffName" => "string",
+                "dateOfBirth"=> "",
+                "mobileNo"=> "numeric",
                 "address" => "nullable",
-                "gender"=> "required|in:Male,Female, Other",
-                "position" => "required"
+                "gender"=> "in:Male,Female, Other",
+                "position" => ""
     
             ];
     }
