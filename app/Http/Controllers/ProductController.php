@@ -8,9 +8,11 @@ use App\Services\ProductService;
 use App\Http\Resources\ProductResource;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Traits\HttpResponses;
 
 class ProductController extends Controller
 {
+    use HttpResponses;
     protected $product;
 
     public function __construct(ProductService $product){
