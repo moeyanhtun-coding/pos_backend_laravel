@@ -11,7 +11,7 @@ use App\Services\SaleInvoiceService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Traits\HttpResponses;
-
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class SaleInvoiceController extends Controller
 {
@@ -26,9 +26,11 @@ class SaleInvoiceController extends Controller
 
     public function index()
     {
-        $saleInvoices = SaleInvoice::with('staff')->get();
+        $saleInvoices = SaleInvoice::with("staff","customer")->get();
 
-        return $this->success(SaleInvoiceResource::collection($saleInvoices), 'success', 200);
+        $resInvoice =SaleInvoiceResource::collection($saleInvoices);
+
+        return $this->success($resInvoice, 'success', 200);
         
     }
 
@@ -38,6 +40,8 @@ class SaleInvoiceController extends Controller
      */
     public function store(StoreSaleInvoiceRequest $request)
     {
+       
+
         DB::beginTransaction();
         try {
            
@@ -53,7 +57,10 @@ class SaleInvoiceController extends Controller
             $validatedData['receive_amount']  = $request->receive_amount;
             $validatedData['change'] = $request->change;
             $validatedData['staff_id'] = $request->staff_id;
+             $validatedData['customer_id'] = $request->customer_id;
             $saleInvoice = $this->invoice->insert($validatedData);
+
+            $resInvoice = SaleInvoiceResource::make($saleInvoice);
             
             foreach ($request->items as $item) {
     
@@ -76,7 +83,7 @@ class SaleInvoiceController extends Controller
            throw $th;
         }
 
-        return $this->success(SaleInvoiceResource::make($saleInvoice), 'success', 200);
+        return $this->success($resInvoice, 'success', 200);
  
     }
 
@@ -102,9 +109,10 @@ class SaleInvoiceController extends Controller
     public function getDataByVoucherNo($voucher_no)
     {
         $saleInvoice = $this->invoice->getDataByVoucherNo($voucher_no);
+        $resInvoice = SaleInvoiceResource::make($saleInvoice);
 
         if ($saleInvoice) {
-            return $this->success(SaleInvoiceResource::make($saleInvoice), 'success', 200);
+            return $this->success($resInvoice, 'success', 200);
 
         }else{
             return $this->error($saleInvoice, 'No data found', 404);

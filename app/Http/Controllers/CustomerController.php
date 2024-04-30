@@ -24,8 +24,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customer = CustomerResource::collection(Customer::get());
-        return $customer;
+        $customers = CustomerResource::collection(Customer::get());
+        return $this->success($customers, "success", 200);
     }
 
     /**
@@ -65,16 +65,14 @@ class CustomerController extends Controller
     {
         $customer = $this->customer->getDataById($id);
 
+        $resCus = CustomerResource::make($customer);
+
         if ($customer) {
-            return response()->json([
-                'data' => CustomerResource::make($customer),
-                'status' => true
-            ], 200);
+            return $this->success($resCus, "success", 200);
+
         }else{
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
+            return $this->error($resCus, 'No data found', 404);
+
         }
     }
 
@@ -92,17 +90,14 @@ class CustomerController extends Controller
     public function update(Request $request, string $id)
     {
         $customer =  $this->customer->update($request->validated(), $id);
+        $resCus = CustomerResource::make($customer);
 
         if($customer) {
-            return response()->json([
-                'message' => 'Successfully updated data',
-                'status' => true
-            ], 200);
+            return $this->success($resCus, "success", 200);
+
        }else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);    
+        return $this->error($resCus, 'No data found', 404);
+  
        }
     }
 
@@ -112,17 +107,13 @@ class CustomerController extends Controller
     public function destroy(string $id)
     {
         $customer =   $this->customer->destroy($id);
-
+      
         if($customer) {
-            return response()->json([
-                'message' => 'Successfully deleted data',
-                'status' => true
-            ], 200);
+            return $this->success(null, "success", 200);
+
        }else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
+        return $this->error(null, 'No data found', 404);
+
        }
     }
 }

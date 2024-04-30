@@ -15,17 +15,39 @@ class StaffController extends Controller
     use HttpResponses;
     protected $staff;
 
+   
+
     public function __construct(StaffService $staff)
     {
         $this->staff = $staff;
     }
 
-   
+  /**
+ * @OA\Info(
+ *      title="My First API",
+ *      version="0.1"
+ * )
+ *
+ * @OA\Get(
+ *     path="/api/staff",
+ *     summary="Get all staff",
+ *     operationId="getStaff",
+ *     tags={"Staff"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *        
+ *     ),
+ *     security={{"api_key": {}}}
+ * )
+ */
     public function index()
     {
-        $staff = Staff::get();
+        $staff = Staff::with('shop')->get();
 
-        return $this->success(StaffResource::collection($staff), 'success', 200);
+        $resStaff = StaffResource::collection($staff);
+
+        return $this->success($resStaff, 'success', 200);
         
     }
 
@@ -38,11 +60,14 @@ class StaffController extends Controller
        $staffCode =  "Stf_" . mt_rand(3000, 999999);
 
        $validatedData["staffCode"] = $staffCode;
+    //    $validatedData["staff_id"] = $request->staff_id;
 
        $staff =  $this->staff->insert($validatedData);
 
+       $resStaff = StaffResource::make($staff);
+
         if ($staff) {
-            return $this->success(StaffResource::make($staff), "success", 200);
+            return $this->success($resStaff, "success", 200);
             
         }
     }
@@ -50,9 +75,10 @@ class StaffController extends Controller
     public function show( $id)
     {
         $staff = $this->staff->getDataById($id);
+        $resStaff = StaffResource::make($staff);
 
         if ($staff) {
-            return $this->success(StaffResource::make($staff), 'success', 200);
+            return $this->success($resStaff, 'success', 200);
 
         }else{
             return $this->error($staff, 'No data found', 404);
@@ -83,7 +109,6 @@ class StaffController extends Controller
             return $this->success(null, 'deleted', 200);
        }else {
         return $this->error(null, "No data found",404 );    
-
        }
     
     }

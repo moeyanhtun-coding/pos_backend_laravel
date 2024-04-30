@@ -21,6 +21,7 @@ class ShopController extends Controller
     public function index()
     {
         $shops = ShopResource::collection(Shop::get());
+        
         return $this->success($shops, "success", 200);
     }
 
@@ -29,10 +30,9 @@ class ShopController extends Controller
      */
     public function store(ShopRequest $request)
     {
-        // return $request->all();
+      
         $data = $request->validated();
         $data['shop_code'] = Shop::generateShopCode();
-        // return $data;
         $shop = $this->shop->insert($data);
 
         if ($shop) {

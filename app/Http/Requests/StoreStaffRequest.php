@@ -30,7 +30,8 @@ class StoreStaffRequest extends FormRequest
             "mobileNo"=> "required",
             "address" => "nullable",
             "gender"=> "required|in:Male,Female, Other",
-            "position" => "required"
+            "position" => "required",
+            "shop_id"=> ''
 
         ];
     }
