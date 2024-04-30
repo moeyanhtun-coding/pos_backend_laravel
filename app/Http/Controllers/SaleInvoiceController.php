@@ -26,7 +26,7 @@ class SaleInvoiceController extends Controller
 
     public function index()
     {
-        $saleInvoices = SaleInvoice::with("staff")->get();
+        $saleInvoices = SaleInvoice::with("staff","customer")->get();
 
         $resInvoice =SaleInvoiceResource::collection($saleInvoices);
 
@@ -57,7 +57,7 @@ class SaleInvoiceController extends Controller
             $validatedData['receive_amount']  = $request->receive_amount;
             $validatedData['change'] = $request->change;
             $validatedData['staff_id'] = $request->staff_id;
-            // $validatedData['shop_id'] = $request->shop_id;
+             $validatedData['customer_id'] = $request->customer_id;
             $saleInvoice = $this->invoice->insert($validatedData);
 
             $resInvoice = SaleInvoiceResource::make($saleInvoice);

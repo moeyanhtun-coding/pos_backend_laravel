@@ -25,7 +25,8 @@ class SaleInvoiceResource extends JsonResource
             'PaymentAmount'=> $this->payment_amount,
             'ReceiveAmount'=> $this->receive_amount,
             'Change' => $this->change,
-            'staff'=> StaffResource::make($this->staff)
+            'Customer'=> CustomerResource::make($this->customer),
+            'Staff'=> StaffResource::make($this->staff)
             // 'staff_id'=> $this->staff_id,
             // 'StaffName'=> $this->staff->staffName
             

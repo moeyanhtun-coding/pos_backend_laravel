@@ -32,7 +32,7 @@ class StoreSaleInvoiceRequest extends FormRequest
             'receive_amount'=> 'required',
             'change' => 'nullable',
             'staff_id'=> '',
-            'shop_id'=>''
+            'customer_id'=>''
         ];
     }
 }

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->float('receive_amount',10,2);
             $table->float('change', 10, 2)->nullable();
             $table->unsignedBigInteger('staff_id');
-            // $table->unsignedBigInteger('shop_id');
+             $table->unsignedBigInteger('customer_id');
             $table->timestamps();
         });
     }
