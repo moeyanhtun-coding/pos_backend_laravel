@@ -33,7 +33,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:sanctum'], function () {
     Route::resource('shop', ShopController::class);
     Route::get('sale-invoices/get-by-voucher/{voucher_no}', [SaleInvoiceController::class, 'getDataByVoucherNo']);
     Route::resource('sale-invoices', SaleInvoiceController::class);
-    // Route::get('product', [ProductController::class, 'index']);
+
 
 
     Route::resource('customer', CustomerController::class);
